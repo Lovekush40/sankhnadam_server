@@ -7,9 +7,10 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon -r dotenv/config --experimental-json-modules src/server",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "dev": "nodemon -r dotenv/config --experimental-json-modules src/server.js",
+  "start": "node src/server.js",
+  "test": "echo \"Error: no test specified\" && exit 1"
+},
   "dependencies": {
     "cloudinary": "^2.9.0",
     "cookie-parser": "^1.4.7",

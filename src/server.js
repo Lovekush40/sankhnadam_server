@@ -8,7 +8,7 @@ import { connectDB } from './db/index.js'
 
 connectDB()
 .then(() => {
-    app.listen(process.env.PORT || 8000, () => {
+    app.listen(process.env.PORT, () => {
         console.log("APP is listening on the port 8000")
     })
 })

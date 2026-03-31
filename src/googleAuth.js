@@ -9,7 +9,7 @@ const googleCallback = (req, res, next) => {
     { session: false },
     async (err, user) => {
       if (err || !user) {
-        return res.redirect(`${FRONTEND_URL}/login`);
+        return res.redirect(`${FRONTEND_URL}/#/login`);
       }
 
       const token = user.generateAccessToken();

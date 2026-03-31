@@ -15,7 +15,7 @@ const googleCallback = (req, res, next) => {
       const token = user.generateAccessToken();
 
       // Redirect to deployed frontend
-      return res.redirect(`${FRONTEND_URL}/success?token=${token}`);
+      return res.redirect(`${FRONTEND_URL}/login?token=${token}`);
     }
   )(req, res, next);
 };

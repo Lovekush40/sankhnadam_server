@@ -1,17 +1,21 @@
 import jwt from "jsonwebtoken";
 import passport from "passport";
 
+const FRONTEND_URL = "https://sankhnadam-frontend.onrender.com";
+
 const googleCallback = (req, res, next) => {
   passport.authenticate(
     "google",
     { session: false },
     async (err, user) => {
-      if (err || !user) return res.redirect("http://localhost:5173/login");
+      if (err || !user) {
+        return res.redirect(`${FRONTEND_URL}/login`);
+      }
 
       const token = user.generateAccessToken();
 
-      // Send token as URL parameter so frontend can read it
-      return res.redirect(`http://localhost:5173/success?token=${token}`);
+      // Redirect to deployed frontend
+      return res.redirect(`${FRONTEND_URL}/success?token=${token}`);
     }
   )(req, res, next);
 };
@@ -22,4 +26,4 @@ const googleLogin = (req, res, next) => {
   })(req, res, next);
 };
 
-export {googleLogin, googleCallback}
+export { googleLogin, googleCallback };

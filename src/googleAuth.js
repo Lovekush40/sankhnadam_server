@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import passport from "passport";
 
-const FRONTEND_URL = "https://sankhnadam-frontend-qh5z.vercel.app/";
+const FRONTEND_URL = "https://sankhnadam-frontend-qh5z.vercel.app";
 
 // Callback after Google OAuth
 const googleCallback = (req, res, next) => {

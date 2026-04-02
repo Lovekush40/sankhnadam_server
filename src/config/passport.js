@@ -9,22 +9,29 @@ passport.use(new GoogleStrategy(
     callbackURL: process.env.GOOGLE_CALLBACK_URL
   },
   async (accessToken, refreshToken, profile, done) => {
-    try {
-      let user = await User.findOne({ googleId: profile.id });
+  try {
+    console.log("PROFILE:", profile);
 
-      if (!user) {
-        user = await User.create({
-          googleId: profile.id,
-          name: profile.displayName,
-          email: profile.emails[0].value,
-        });
-      }
+    let user = await User.findOne({ googleId: profile.id });
 
-      return done(null, user);
-    } catch (err) {
-      return done(err, null);
+    if (!user) {
+      user = await User.create({
+        googleId: profile.id,
+        name: profile.displayName,
+        email: profile.emails[0].value,
+      });
+
+      console.log("NEW USER CREATED:", user);
+    } else {
+      console.log("EXISTING USER:", user);
     }
+
+    return done(null, user);
+  } catch (err) {
+    console.log("GOOGLE STRATEGY ERROR:", err);
+    return done(err, null);
   }
+}
 ));
 
 passport.serializeUser((user, done) => done(null, user.id));

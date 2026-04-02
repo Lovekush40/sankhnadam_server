@@ -51,9 +51,9 @@ const bookingSchema = new mongoose.Schema(
     },
 
     // 🔗 Reference to latest payment/order
-    lastRazorpayOrderId: {
-      type: String,
-    },
+   razorpay_order_id: {
+    type: String,
+  },
   },
   { timestamps: true }
 );

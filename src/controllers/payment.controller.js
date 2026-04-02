@@ -32,6 +32,8 @@ const createOrder = asyncHandler(async (req, res) => {
     receipt: "receipt_" + Date.now(),
   });
 
+  console.log("order", order);
+
   // 📦 Create booking
   const booking = await Booking.create({
     userId: req.user._id,
@@ -44,6 +46,8 @@ const createOrder = asyncHandler(async (req, res) => {
     razorpay_order_id: order.id,
     paymentStatus: "pending",
   });
+
+  console.log(booking, "this is booking")
 
   return res.status(200).json(
     new ApiResponse(200, order, "order created successfully")

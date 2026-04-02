@@ -38,6 +38,7 @@ const createOrder = asyncHandler(async (req, res) => {
   const booking = await Booking.create({
     userId: req.user._id,
     packageId,
+    packageName: pkg.title,
 
     totalAmount,
     paidAmount: 0,
@@ -47,7 +48,7 @@ const createOrder = asyncHandler(async (req, res) => {
     paymentStatus: "pending",
   });
 
-  console.log(booking, "this is booking")
+  console.log("this is booking", booking)
 
   return res.status(200).json(
     new ApiResponse(200, order, "order created successfully")

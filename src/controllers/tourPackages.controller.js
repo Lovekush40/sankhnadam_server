@@ -117,7 +117,7 @@ const deletePackage = async (req, res) => {
 };
 
 export {
-   getPackages,
+  getPackages,
   getPackageById,
   createPackage,
   updatePackage,

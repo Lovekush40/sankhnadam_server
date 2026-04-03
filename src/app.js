@@ -21,11 +21,13 @@ import authRouter from './routes/googleAuth.route.js'
 import tourPackageRouter from './routes/tourPackage.route.js'
 import messageRouter from './routes/message.route.js'
 import paymentRouter from './routes/payment.routes.js'
+import bookingRouter from './routes/payment.routes.js'
 
 
 app.use('/api/v1', authRouter)
 app.use('/api/v1/packages', tourPackageRouter)
 app.use('/api/v1/contact', messageRouter)
 app.use('/api/v1/payment', paymentRouter)
+app.use('/api/v1/bookings', bookingRouter)
 
 export {app}

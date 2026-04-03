@@ -8,24 +8,26 @@ import { Booking } from "../models/booking.model.js";
 import { TourPackage } from "../models/tourPackage.model.js";
 
 const createOrder = asyncHandler(async (req, res) => {
-  const { packageId } = req.body;
+  const { packageId, persons } = req.body;
 
   if (!packageId) {
     throw new ApiError(400, "packageId is required");
   }
 
-  // 🔍 Fetch package
-  const pkg = await TourPackage.findById(packageId);
+  // Validate persons (default to 1 if not sent)
+  const numPersons = Math.max(1, parseInt(persons) || 1);
 
+  // Fetch package from DB — never trust frontend price
+  const pkg = await TourPackage.findById(packageId);
   if (!pkg) {
     throw new ApiError(404, "Package not found");
   }
 
-  // 🔐 Calculate amount (DO NOT trust frontend)
-  const totalAmount = pkg.price;
+  // Calculate amounts based on persons
+  const totalAmount = pkg.price * numPersons;
   const advanceAmount = Math.round(totalAmount * 0.3);
 
-  // 💳 Create Razorpay order
+  // Create Razorpay order (amount in paise)
   const order = await razorpay.orders.create({
     amount: advanceAmount * 100,
     currency: "INR",
@@ -34,24 +36,24 @@ const createOrder = asyncHandler(async (req, res) => {
 
   console.log("order", order);
 
-  // 📦 Create booking
+  // Save booking with persons and correct amounts
   const booking = await Booking.create({
     userId: req.user._id,
     packageId,
     packageName: pkg.title,
-
+    persons: numPersons,
     totalAmount,
     paidAmount: 0,
     remainingAmount: totalAmount,
-
     razorpay_order_id: order.id,
     paymentStatus: "pending",
   });
 
-  console.log("this is booking", booking)
+  console.log("this is booking", booking);
 
+  // Return order + totalAmount so frontend can show live preview
   return res.status(200).json(
-    new ApiResponse(200, order, "order created successfully")
+    new ApiResponse(200, { ...order, totalAmount, advanceAmount }, "order created successfully")
   );
 });
 
@@ -76,12 +78,10 @@ const verifyPayment = asyncHandler(async (req, res) => {
   }
 
   if (expectedSignature === razorpay_signature) {
-
     const advanceAmount = Math.round(booking.totalAmount * 0.3);
 
     booking.razorpay_payment_id = razorpay_payment_id;
     booking.razorpay_signature = razorpay_signature;
-
     booking.paidAmount = advanceAmount;
     booking.remainingAmount = booking.totalAmount - advanceAmount;
     booking.paymentStatus = "partial";
@@ -91,9 +91,7 @@ const verifyPayment = asyncHandler(async (req, res) => {
     return res.status(200).json(
       new ApiResponse(200, booking, "payment verified successfully")
     );
-
   } else {
-
     booking.paymentStatus = "failed";
     await booking.save();
 
@@ -103,4 +101,4 @@ const verifyPayment = asyncHandler(async (req, res) => {
   }
 });
 
-export {createOrder, verifyPayment}
+export { createOrder, verifyPayment };

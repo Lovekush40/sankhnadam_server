@@ -19,6 +19,10 @@ const bookingSchema = new mongoose.Schema(
       required: true,
     },
 
+    packageImage: {
+      type: String,
+    },
+
     totalAmount: {
       type: Number,
       required: true,

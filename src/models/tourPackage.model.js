@@ -28,7 +28,7 @@ const TourPackageSchema = new Schema(
     exclusions: { type: [String], default: [] },
     policies: { type: [String], default: [] },
     startDates: { type: [Date], default: [] },
-    timing: { type: String, default: "" },
+    timing: { type: String, default: "" },  
     groupSize: { type: String, default: "" },
   },
   { timestamps: true } // createdAt, updatedAt

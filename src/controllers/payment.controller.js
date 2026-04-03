@@ -39,6 +39,7 @@ const createOrder = asyncHandler(async (req, res) => {
     userId: req.user._id,
     packageId,
     packageName: pkg.title,
+    packageImage: pkg.image,
     persons: numPersons,
     travelDate: travelDate ? new Date(travelDate) : undefined,
     totalAmount,

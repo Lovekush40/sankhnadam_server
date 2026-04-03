@@ -5,6 +5,8 @@ import asyncHandler from "../utils/asyncHandler.js";
 const getUserBookings = asyncHandler(async(req, res) => {
     const myBooking = Booking.find({userId: req.user._id }).sort({createdAt: -1})
 
+    console.log("My bookings", myBooking)
+
     return res
     .status(200)
     .json(
